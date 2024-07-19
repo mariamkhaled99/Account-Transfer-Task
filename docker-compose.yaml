@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  app:
+    build: ./docker/django
+    volumes:
+      - .:/core
+    ports:
+      - 8000:8000
+    container_name: Account_Transfer_Django
+    command: >
+      sh -c "wait-for-it && \
+        python manage.py migrate && \
+        python manage.py runserver 0.0.0.0:8000"
+
+    environment:
+    - DB_NAME=Account_Transfer
+    - DB_USER=postgres
+    - DB_PASSWORD=password
+    - DB_HOST=postgres
+    - DB_PORT=5432
+
+    
+  postgres:
+    build: ./docker/db
+    container_name: Account_Transfer_DB
+    environment:
+      - POSTGRES_DB=Account_Transfer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    
+   
+    
+
+

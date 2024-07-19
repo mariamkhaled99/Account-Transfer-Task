@@ -1,0 +1,94 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Welcome to the Account Management System</h1>
+        <p class="lead">This project is designed to manage account transfers and track transaction histories. Below, you'll find an overview of the project's features and usage examples.</p>
+        
+        <h2>Project Features</h2>
+        <ul>
+            <li><strong>Account Management:</strong> Manage accounts with details like account number, name, and balance.</li>
+            <li><strong>Funds Transfer:</strong> Transfer funds securely between accounts.</li>
+            <li><strong>Transaction History:</strong> Track and view all transaction activities.</li>
+        </ul>
+        
+        <h2>Examples</h2>
+        <div class="mb-4">
+            <h3>Transferring Funds</h3>
+            <p>Visit the <a href="{% url 'transfer_funds' %}">Transfer Funds</a> page to enter account details and the amount to transfer.</p>
+        </div>
+        <div class="mb-4">
+            <h3>Viewing Accounts</h3>
+            <p>Go to the <a href="{% url 'list_accounts' %}">View Accounts</a> page to see a list of all accounts and their details.</p>
+        </div>
+        <div class="mb-4">
+            <h3>Viewing Transaction History</h3>
+            <p>Navigate to the <a href="{% url 'transaction_history' %}">Transaction History</a> page to review past transactions.</p>
+        </div>
+
+        <h2>Understanding Transactions and Account Locking</h2>
+        <p>Ensuring reliable and accurate transactions is crucial. Here's how transactions are managed:</p>
+        
+        <h3>Using <code>transaction.atomic()</code></h3>
+        <p><code>transaction.atomic()</code> makes sure that operations are performed as a single atomic transaction. If any part fails, everything is rolled back to maintain data consistency.</p>
+        <pre class="bg-light p-3">
+<code>
+from django.db import transaction
+
+def transfer_funds(from_account, to_account, amount):
+    with transaction.atomic():
+        from_account.refresh_from_db()
+        to_account.refresh_from_db()
+
+        if from_account.balance < amount:
+            raise ValueError("Insufficient funds")
+
+        from_account.balance -= amount
+        to_account.balance += amount
+
+        from_account.save()
+        to_account.save()
+</code>
+        </pre>
+
+        <h3>Account Locking</h3>
+        <p>Account records are locked during transactions to prevent concurrent modifications. Using <code>refresh_from_db()</code> locks the record and ensures up-to-date data.</p>
+
+        <h2>Search Functionality</h2>
+        <p>The search feature allows you to filter accounts based on various criteria:</p>
+
+        <h4>Exact Matching</h4>
+        <p>Exact matching is used for fields like <code>account_number</code>. When you search by account number, the system finds accounts with the exact number you specify.</p>
+
+        <h4>Non-Exact Matching</h4>
+        <p>Non-exact matching is used for fields like <code>account_name</code> and <code>balance</code>. For account names, partial matches are allowed (case-insensitive). For balance, you can specify a range of values to filter accounts that fall within this range.</p>
+
+        <p>To use the search functionality, visit the <a href="{% url 'list_accounts' %}">View Accounts</a> page where you can input search criteria and view filtered results.</p>
+
+        <h2>Testing and Coverage</h2>
+        <p>Testing ensures that our application works correctly. We use <code>pytest</code> to run our tests and measure code coverage. Code coverage indicates how much of the code is exercised by the tests.</p>
+
+        <h3>Running Tests</h3>
+        <p>Tests are run using the following command:</p>
+        <pre class="bg-light p-3">
+<code>
+pytest --cov=accounts --cov-report html
+</code>
+        </pre>
+
+        <h3>Viewing Coverage Report</h3>
+        <p>After running the tests, an HTML coverage report is generated in the <code>htmlcov</code> directory. To view it, open the <code>index.html</code> file located in the <code>htmlcov</code> directory in your web browser.</p>
+        <pre class="bg-light p-3">
+<code>
+# On Windows
+start htmlcov/index.html
+
+</code>
+        </pre>
+
+        <h3>Current Test Coverage</h3>
+        <p>As of the latest run, our test coverage is at 91%. This percentage represents the portion of the codebase exercised by our tests. A higher coverage percentage indicates a more thoroughly tested codebase.</p>
+    </div>
+{% endblock %}

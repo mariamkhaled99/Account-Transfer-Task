@@ -1,0 +1,78 @@
+<!-- accounts/templates/accounts/list_accounts.html -->
+
+{% extends 'accounts/base.html' %}
+
+{% block title %}List Accounts{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Accounts</h1>
+
+        <!-- Search Form -->
+        <form method="get" action="{% url 'list_accounts' %}" class="mb-4">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="account_name" class="form-control" placeholder="Account Name" value="{{ request.GET.account_name }}">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="account_number" class="form-control" placeholder="Account Number" value="{{ request.GET.account_number }}">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="balance_min" class="form-control" placeholder="Min Balance" value="{{ request.GET.balance_min }}">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="balance_max" class="form-control" placeholder="Max Balance" value="{{ request.GET.balance_max }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Accounts Table -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Account ID</th>
+                    <th>Account Number</th>
+                    <th>Account Name</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in page_obj %}
+                <tr>
+                    <td>{{ account.id }}</td>
+                    <td>{{ account.account_number }}</td>
+                    <td>{{ account.account_name }}</td>
+                    <td>{{ account.balance }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No accounts found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.account_name %}&account_name={{ request.GET.account_name }}{% endif %}{% if request.GET.account_number %}&account_number={{ request.GET.account_number }}{% endif %}{% if request.GET.balance_min %}&balance_min={{ request.GET.balance_min }}{% endif %}{% if request.GET.balance_max %}&balance_max={{ request.GET.balance_max }}{% endif %}">&laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.account_name %}&account_name={{ request.GET.account_name }}{% endif %}{% if request.GET.account_number %}&account_number={{ request.GET.account_number }}{% endif %}{% if request.GET.balance_min %}&balance_min={{ request.GET.balance_min }}{% endif %}{% if request.GET.balance_max %}&balance_max={{ request.GET.balance_max }}{% endif %}">Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.account_name %}&account_name={{ request.GET.account_name }}{% endif %}{% if request.GET.account_number %}&account_number={{ request.GET.account_number }}{% endif %}{% if request.GET.balance_min %}&balance_min={{ request.GET.balance_min }}{% endif %}{% if request.GET.balance_max %}&balance_max={{ request.GET.balance_max }}{% endif %}">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.account_name %}&account_name={{ request.GET.account_name }}{% endif %}{% if request.GET.account_number %}&account_number={{ request.GET.account_number }}{% endif %}{% if request.GET.balance_min %}&balance_min={{ request.GET.balance_min }}{% endif %}{% if request.GET.balance_max %}&balance_max={{ request.GET.balance_max }}{% endif %}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}
