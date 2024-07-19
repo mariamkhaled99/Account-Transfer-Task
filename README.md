@@ -46,3 +46,28 @@ def transfer_funds(from_account, to_account, amount):
 
         from_account.save()
         to_account.save()
+
+### Prerequisites
+
+- Python 3.8 or later
+- pip (Python package installer)
+- virtualenv (optional but recommended)
+- Docker (optional for containerized setup)
+
+### Installation Steps
+
+1. **local using venv and Django**
+   ```bash
+   git clone <repository-url>
+   cd Account-Transfer-Task
+   python -m venv venv 
+   venv\Scripts\activate
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+2. **local using Docker**
+```bash
+  docker-compose build
+  docker-compose up
+   ```
+   ```
