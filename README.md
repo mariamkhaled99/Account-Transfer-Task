@@ -57,6 +57,7 @@ def transfer_funds(from_account, to_account, amount):
 ### Installation Steps
 
 1. **local using venv and Django**
+
    ```bash
    git clone <repository-url>
    cd Account-Transfer-Task
@@ -65,6 +66,7 @@ def transfer_funds(from_account, to_account, amount):
    python manage.py makemigrations
    python manage.py migrate
    ```
+
 2. **local using Docker**
 ```bash
   docker-compose build
