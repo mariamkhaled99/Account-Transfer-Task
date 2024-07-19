@@ -54,10 +54,10 @@ def transfer_funds(from_account, to_account, amount):
 - virtualenv (optional but recommended)
 - Docker (optional for containerized setup)
 
+
 ### Installation Steps
 
 1. **local using venv and Django**
-
    ```bash
    git clone <repository-url>
    cd Account-Transfer-Task
@@ -71,5 +71,4 @@ def transfer_funds(from_account, to_account, amount):
 ```bash
   docker-compose build
   docker-compose up
-   ```
    ```
